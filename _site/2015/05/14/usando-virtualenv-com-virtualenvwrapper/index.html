@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Usando virtualenv com virtualenvwrapper &#8211; Personal Notepad</title>
+    <link rel="dns-prefetch" href="//maxcdn.bootstrapcdn.com">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Thoughts, stories and ideas.">
+    <meta name="robots" content="all">
+    <meta name="author" content="André Luiz">
+    
+    <meta name="keywords" content="">
+    <link rel="canonical" href="http://localhost:4000/2015/05/14/usando-virtualenv-com-virtualenvwrapper/">
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed for Personal Notepad" href="/feed.xml" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/pixyll.css?201711101809" type="text/css">
+
+    <!-- Fonts -->
+    
+    <link href='//fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Lato:900,300' rel='stylesheet' type='text/css'>
+    
+    
+      <link href="//maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    
+
+    <!-- MathJax -->
+    
+
+    <!-- Verifications -->
+    
+    
+
+    <!-- Open Graph -->
+    <!-- From: https://github.com/mmistakes/hpstr-jekyll-theme/blob/master/_includes/head.html -->
+    <meta property="og:locale" content="en_US">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Usando virtualenv com virtualenvwrapper">
+    <meta property="og:description" content="Thoughts, stories and ideas.">
+    <meta property="og:url" content="http://localhost:4000/2015/05/14/usando-virtualenv-com-virtualenvwrapper/">
+    <meta property="og:site_name" content="Personal Notepad">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    
+        <meta name="twitter:site" content="@xdvl" />
+        <meta name="twitter:creator" content="@xdvl" />
+    
+    <meta name="twitter:title" content="Usando virtualenv com virtualenvwrapper" />
+    <meta name="twitter:description" content="Thoughts, stories and ideas." />
+    <meta name="twitter:url" content="http://localhost:4000/2015/05/14/usando-virtualenv-com-virtualenvwrapper/" />
+    
+
+    <!-- Icons -->
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/favicon-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/favicon-160x160.png" sizes="160x160">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+
+    
+</head>
+
+<body class="site">
+  
+	
+
+  <div class="site-wrap">
+    <header class="site-header px2 px-responsive">
+  <div class="mt2 wrap">
+    <div class="measure">
+      <a href="http://localhost:4000" class="site-title">Personal Notepad</a>
+      <nav class="site-nav">
+        
+
+
+
+    
+    
+    
+    
+        <a href="/about/">About</a>
+    
+
+    
+
+
+      </nav>
+      <div class="clearfix"></div>
+      
+        <div class="social-icons">
+  <div class="social-icons-right">
+    
+      <a class="fa fa-github" href="https://github.com/dvl"></a>
+    
+    
+    
+    
+    <a class="fa fa-rss" href="/feed.xml"></a>
+    
+      <a class="fa fa-twitter" href="https://twitter.com/xdvl"></a>
+    
+    
+    
+    
+    
+      <a class="fa fa-envelope" href="mailto:contato@xdvl.info"></a>
+    
+    
+    
+    
+    
+      <a class="fa fa-telegram" href="https://t.me/andreluiz"></a>
+    
+    
+  </div>
+  <div class="right">
+    
+    
+    
+  </div>
+</div>
+<div class="clearfix"></div>
+
+      
+    </div>
+  </div>
+</header>
+
+
+    <div class="post p2 p-responsive wrap" role="main">
+      <div class="measure">
+        
+
+
+<div class="post-header mb2">
+  <h1>Usando virtualenv com virtualenvwrapper</h1>
+  <span class="post-meta">May 14, 2015</span><br>
+  
+  <span class="post-meta small">
+  
+    1 minute read
+  
+  </span>
+</div>
+
+<article class="post-content">
+  <p>O uso do <code class="highlighter-rouge">virtualenv</code> é um item quase que obrigatório em qualquer ambiente de desenvolvimento Python, é usado para isolar os pacotes do projeto dos pacotes do sistema.</p>
+
+<p>O que vejo poucas pessoas usando é o <code class="highlighter-rouge">virtualenvwrapper</code> que visa a resolver vários problemas criados pelo <code class="highlighter-rouge">virtualenv</code> como a necessidade de se usar sempre <code class="highlighter-rouge">source bin/activate</code> e os arquivos do <code class="highlighter-rouge">virtualenv</code> sendo colocados lado-a-lado com os arquivos do seu projeto.</p>
+
+<h2 id="instalação">Instalação</h2>
+
+<p>Primeiro vamos a instalação dos pacotes necessários (essa possivelmente deverá ser a ultima vez que você instala algo globalmente no seu sistema):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo pip install virtualenv virtualenvwrapper
+</code></pre></div></div>
+
+<p>E adicione a seguinte linha ao final do seu arquivo <code class="highlighter-rouge">.bashrc</code> (ou equivalente):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>source /usr/local/bin/virtualenvwrapper.sh
+</code></pre></div></div>
+
+<p>Reinicie seu shell e você possuirá entre outros os seguintes novos comandos.</p>
+
+<h2 id="uso">Uso</h2>
+
+<p>Para criar um novo ambiente use:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> mkvirtualenv meu_projeto
+</code></pre></div></div>
+
+<p>Para criar um novo ambiente com Python 3:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> mkvirtualenv meu_projeto2 --python=`which python3`
+</code></pre></div></div>
+
+<p>Para listar todos seus ambientes:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsvirtualenv
+</code></pre></div></div>
+
+<p>Para executar um comando em todos os ambientes:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>allvirtualenv pip install -U django
+</code></pre></div></div>
+
+<p>E para remover um ambiente:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rmvirtualenv meu_projeto
+</code></pre></div></div>
+
+<p>E para ativar/trocar de ambiente:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>workon meu_projeto2
+</code></pre></div></div>
+
+<p>Para desativar é igual, sem qualquer novidade:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>deactivate
+</code></pre></div></div>
+
+<h2 id="dicas">Dicas</h2>
+
+<p>Caso você esteja usando o <code class="highlighter-rouge">zsh</code> como shell juntamente com o <code class="highlighter-rouge">oh-my-zsh</code> é possivel ativar automaticamente um ambiente ao entrar em determinadas pastas (<code class="highlighter-rouge">cd meu_projeto</code>) para isso adicione o plugin <code class="highlighter-rouge">virtualenvwrapper</code> a lista de plugins no seu arquivo <code class="highlighter-rouge">.zshrc</code> e sempre que você entrar em alguma pasta o plugin irá procurar um ambiente com o nome daquela pasta e ativa-lo, também é possivel criar um arquivo chamado <code class="highlighter-rouge">.venv</code> dentro da pasta do projeto contendo o nome do ambiente a ser ativado (ex.: <code class="highlighter-rouge">echo meu_projeto &gt; .venv</code>).</p>
+
+<p>Originalmente publicado em: <a href="http://www.pythonclub.com.br/">Python Club</a></p>
+
+</article>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <footer class="center">
+  <div class="measure">
+    <small>
+      Theme crafted with &lt;3 by <a href="http://johnotander.com">John Otander</a> (<a href="https://twitter.com/4lpine">@4lpine</a>).<br>
+      &lt;/&gt; available on <a href="https://github.com/johnotander/pixyll">GitHub</a>.
+    </small>
+  </div>
+</footer>
+
+
+</body>
+</html>

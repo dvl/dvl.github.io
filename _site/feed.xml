@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Personal Notepad</title>
+    <description>Thoughts, stories and ideas.</description>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
+    
+      <item>
+        <title>Configurando Pidgin para conectar ao Google Hangouts</title>
+        <description>&lt;p&gt;&lt;img src=&quot;http://i.imgur.com/EFfyWlW.png&quot; alt=&quot;Configuração&quot; /&gt;&lt;/p&gt;
+</description>
+        <pubDate>Wed, 08 Feb 2017 20:51:19 -0200</pubDate>
+        <link>http://localhost:4000/2017/02/08/configurando-pidgin-para-conectar-ao-google-hangouts/</link>
+        <guid isPermaLink="true">http://localhost:4000/2017/02/08/configurando-pidgin-para-conectar-ao-google-hangouts/</guid>
+      </item>
+    
+      <item>
+        <title>Django - melhorando a estrutura inicial do projeto</title>
+        <description>&lt;p&gt;Creio que por razões históricas a equipe do Django nunca se preocupou muito em alterar a disposição de arquivos e pastas que tanto os comandos &lt;code class=&quot;highlighter-rouge&quot;&gt;startproject&lt;/code&gt; e &lt;code class=&quot;highlighter-rouge&quot;&gt;startapp&lt;/code&gt; geram.&lt;/p&gt;
+
+&lt;p&gt;Na minha opinião ambos tem um problema muito sério que é não criar um namespace exclusivo para o seu projeto.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Namespaces are one honking great idea – let’s do more of those!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;The Zen of Python, by Tim Peters&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Na estrutura padrão é muito normal que você termine importações parecidas com:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from filmes.models import Titulo
+from series.models import Ator
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Entretanto isso na minha cabeça gera uma ambiguidade enorme, seriam filmes e series parte do projeto? Seriam da biblioteca padrão? Seriam pacotes baixados do PyPi? Pelo nome posso dizer que fazem parte do projeto mas nem sempre é tão simples assim.&lt;/p&gt;
+
+&lt;p&gt;O próprio Django usa namespace, você não faz:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from utils import timezone
+from utils.crypto import get_random_string
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;E sim:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from django.utils import timezone
+from django.utils.crypto import get_random_string
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Então porque com nosso projeto não podemos fazer semelhante?&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from philos.filmes.models import Titulo
+from philos.series.models import Ator
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Esse é um padrão bem simples de ser implementado no seu projeto Django, vamos a um exemplo, logo após o &lt;code class=&quot;highlighter-rouge&quot;&gt;startproject&lt;/code&gt; nossa estrutura de diretórios é idêntica a exibida abaixo.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;philos.tv
+├── manage.py
+└── philos
+    ├── __init__.py
+    ├── settings.py
+    ├── urls.py
+    └── wsgi.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Ao criar uma nova app ele por padrão é colocado na raiz do projeto, nesse caso precisamos mover essa nova app no nosso caso para dentro da pasta &lt;code class=&quot;highlighter-rouge&quot;&gt;philos&lt;/code&gt; ficando da seguinte forma:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;philos.tv
+├── manage.py
+└── philos
+    ├── filmes
+    │   ├── admin.py
+    │   ├── apps.py
+    │   ├── __init__.py
+    │   ├── migrations
+    │   │   └── __init__.py
+    │   ├── models.py
+    │   ├── tests.py
+    │   └── views.py
+    ├── __init__.py
+    ├── settings.py
+    ├── urls.py
+    └── wsgi.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Para facilitar isso pode ser feito com os seguintes comandos:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ mkdir -p philos/filmes
+$ python manage.py startapp filmes philos/filmes
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Então registramos nossa app no &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt; da seguinte forma:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;INSTALLED_APPS = [
+    'django.contrib.admin',
+    ...
+    'philos.filmes',
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Criei um &lt;a href=&quot;https://github.com/dvl/example-for-blog-1&quot;&gt;repositório no GitHub&lt;/a&gt; para que você possa navegar pelas pastas para facilitar o entendimento.&lt;/p&gt;
+
+&lt;p&gt;Também tenho um &lt;a href=&quot;https://github.com/dvl/cookiecutter-django-clean-template&quot;&gt;outro projeto&lt;/a&gt; que uso de base para qualquer projeto que começo atualmente.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 03 Sep 2016 19:28:42 -0300</pubDate>
+        <link>http://localhost:4000/2016/09/03/django-melhorando-a-estrutura-inicial-do-projeto/</link>
+        <guid isPermaLink="true">http://localhost:4000/2016/09/03/django-melhorando-a-estrutura-inicial-do-projeto/</guid>
+      </item>
+    
+      <item>
+        <title>Pare de usar @gmail.com para coisas com as quais você se importa</title>
+        <description>&lt;p&gt;A exatas duas semanas tive minha conta da Google desativada por motivos que até hoje não foram esclarecidos.&lt;/p&gt;
+
+&lt;p&gt;Ao tentar entrar em contato com a Google descobri que você simplesmente não pode falar com a equipe de contas responsável por desativar minha conta.&lt;/p&gt;
+
+&lt;p&gt;Depois de questionar no fórum de suporte tanto em português quanto em inglês tive uma resposta semelhante em ambos, a primeira de uma funcionária da Google.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://i.imgur.com/PGf4Ovz.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://i.imgur.com/1QrwOKA.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Em ambos os casos fui obrigado a apontar que o Gmail pode não ser diretamente pago mais todos os serviços pagos da Google (Play, Drive, Music, Serviços para desenvolvedores) são atrelados a ele.&lt;/p&gt;
+
+&lt;p&gt;Ninguém liga, mesmo pagando eles dizem que a Google pode fazer o que quiser com sua conta e não é sequer obrigada a explicar os motivos.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 09 Jul 2016 16:15:21 -0300</pubDate>
+        <link>http://localhost:4000/2016/07/09/pare-de-usar-gmail-com-para-coisas-com-as-quais-voce-se-importa/</link>
+        <guid isPermaLink="true">http://localhost:4000/2016/07/09/pare-de-usar-gmail-com-para-coisas-com-as-quais-voce-se-importa/</guid>
+      </item>
+    
+      <item>
+        <title>Não adicione arquivos do seu SO/editor no .gitignore</title>
+        <description>&lt;p&gt;A ideia é simples, o arquivo &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt; do projeto deve ser usado somente para ignorar arquivos gerados pelo projeto.&lt;/p&gt;
+
+&lt;p&gt;Seu projeto não deve ser responsável por ignorar arquivos gerados pelo seu sistema operacional ou editor por exemplo &lt;code class=&quot;highlighter-rouge&quot;&gt;.DS_Store&lt;/code&gt;do OS X ou &lt;code class=&quot;highlighter-rouge&quot;&gt;.idea&lt;/code&gt; das IDEs da JetBrains.&lt;/p&gt;
+
+&lt;p&gt;Segundo os &lt;a href=&quot;https://github.com/django/django/blob/master/.gitignore&quot;&gt;desenvolvedores do Django&lt;/a&gt; por exemplo você deve configurar isso em locais que não vão para o repositório.&lt;/p&gt;
+
+&lt;p&gt;Para mim a maneira mais fácil é no &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.gitconfig&lt;/code&gt; usando o &lt;code class=&quot;highlighter-rouge&quot;&gt;core.excludesFile&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Exemplo:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;~/.gitconfig&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[core]
+excludesFile = ~/.gitignore_global
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;~/.gitignore_global&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;*.sublime-project
+*.sublime-workspace
+.idea
+.ipynb_checkpoints
+
+*.ipynb
+
+.DS_Store
+Thumbs.db
+desktop.ini
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;As vantagens são: Você faz isso uma única vez e você não configura o projeto no qual você está trabalhando como responsável por lidar com seus arquivos, que talvez não seja de interesse de outro desenvolvedor, mas que estariam lá caso ele precise dar manutenção no arquivo complicando a vida dele.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 06 Mar 2016 21:24:11 -0300</pubDate>
+        <link>http://localhost:4000/2016/03/06/nao-adicione-arquivos-do-seu-so-editor-no-gitginore/</link>
+        <guid isPermaLink="true">http://localhost:4000/2016/03/06/nao-adicione-arquivos-do-seu-so-editor-no-gitginore/</guid>
+      </item>
+    
+      <item>
+        <title>Atualizar todos pacotes via pip</title>
+        <description>&lt;p&gt;Para listar todos os pacotes desatualizados basta usar:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pip list --outdated&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Então para atualizar tudo de uma vez:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pip list --outdated | awk '{print $1}' | xargs sudo pip install -U&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Remova o sudo caso queira atualizar dentro do virtualenv.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 26 Feb 2016 15:43:41 -0300</pubDate>
+        <link>http://localhost:4000/2016/02/26/atualizar-todos-pacotes-via-pip/</link>
+        <guid isPermaLink="true">http://localhost:4000/2016/02/26/atualizar-todos-pacotes-via-pip/</guid>
+      </item>
+    
+      <item>
+        <title>Workflow com Git Flow</title>
+        <description>&lt;p&gt;Esse é um artigo rápido que visa descrever como venho trabalhando com o Git Flow, antes de mais nada o Git Flow é uma forma de gerenciar branchs e tags em repositórios Git originalmente descrita &lt;a href=&quot;http://nvie.com/posts/a-successful-git-branching-model/&quot;&gt;aqui&lt;/a&gt; e que originou &lt;a href=&quot;https://github.com/nvie/gitflow&quot;&gt;uma extensão&lt;/a&gt; para o Git pelo mesmo autor.&lt;/p&gt;
+
+&lt;p&gt;Partindo do principio que você já possui o &lt;code class=&quot;highlighter-rouge&quot;&gt;git-flow&lt;/code&gt; instalado, na raiz do seu repositório use o comando &lt;code class=&quot;highlighter-rouge&quot;&gt;git flow init&lt;/code&gt; para configurar o git flow no seu repositório atual, serão feitas algumas perguntas para as quais eu habitualmente uso sempre a opção default.&lt;/p&gt;
+
+&lt;p&gt;Git flow instalado, configuração já feita, vamos a um &lt;em&gt;how to&lt;/em&gt; de como agir no dia-a-dia.&lt;/p&gt;
+
+&lt;h5 id=&quot;quero-iniciar-o-desenvolvimento-de-uma-nova-feature&quot;&gt;Quero iniciar o desenvolvimento de uma nova feature&lt;/h5&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git flow feature start nome-da-feature
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;O comando acima iria criar uma nova branch chamada &lt;code class=&quot;highlighter-rouge&quot;&gt;feature/nome-da-feature&lt;/code&gt; partindo do conteúdo atual da branch &lt;code class=&quot;highlighter-rouge&quot;&gt;develop&lt;/code&gt;, a partir daqui você deve realizar todo seu trabalho nessa branch que acabou de ser criada.&lt;/p&gt;
+
+&lt;h5 id=&quot;quero-publicar-minha-feature-para-outra-pessoa-mexer-ou-continuar-de-outro-computador&quot;&gt;Quero publicar minha feature para outra pessoa mexer ou continuar de outro computador.&lt;/h5&gt;
+
+&lt;p&gt;Antes de mais nada faça commit de todas sua alterações como de costume e então execute o comando abaixo:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git flow feature publish nome-da-feature
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Esse comando simplesmente ira fazer um &lt;code class=&quot;highlighter-rouge&quot;&gt;git push&lt;/code&gt; para o servidor remoto criando a branch caso não exista.&lt;/p&gt;
+
+&lt;p&gt;Então a outra pessoa (ou você mesmo de outro computador) deverá usar o comando abaixo.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git flow feature pull nome-da-feature
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;terminei-minha-feature-e-agora&quot;&gt;Terminei minha feature e agora?&lt;/h5&gt;
+
+&lt;p&gt;Depois de commitar todas sua alterações use o comando:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git flow feature finish nome-da-feature
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Esse comando ira executar um merge da sua feature na branch &lt;code class=&quot;highlighter-rouge&quot;&gt;develop&lt;/code&gt; e então ira remover a branch &lt;code class=&quot;highlighter-rouge&quot;&gt;feature/nome-da-feature&lt;/code&gt; da sua maquina local e do  servidor remoto (e sim, é esse o comportamento desejado, não queremos 200 branchs defasadas depois de alguns meses de projeto e queremos poder eventualmente reutilizar o nome de alguma feature em uma futura melhoria por exemplo).&lt;/p&gt;
+
+&lt;h5 id=&quot;ok-já-tenho-todas-as-minhas-features-prontas-mergeadas-na-develop-e-agora-preciso-coloca-las-no-ar&quot;&gt;Ok, já tenho todas as minhas features prontas, mergeadas na develop e agora preciso coloca-las no ar.&lt;/h5&gt;
+
+&lt;p&gt;Esse é o momento no qual devemos iniciar a criação de um release, para isso utilize o comando&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git flow release start 1.2.0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Aonde &lt;code class=&quot;highlighter-rouge&quot;&gt;1.2.0&lt;/code&gt; é o nome do release, a partir desse nome será gerada uma tag ao finalizarmos o release, pode ser usado o nome que você quiser &lt;strong&gt;eu&lt;/strong&gt; me habituei em criar release com usando como nome o número da versão que está indo para o ar baseado sempre no &lt;a href=&quot;http://semver.org/lang/pt-BR/&quot;&gt;SemVer&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;O comando acima ira criar uma nova branch partindo da &lt;code class=&quot;highlighter-rouge&quot;&gt;develop&lt;/code&gt;, caso você tenha algum ajuste para fazer no seu código essa é a hora.&lt;/p&gt;
+
+&lt;h5 id=&quot;e-agora-quero-validar-isso-no-meu-servidor-de-homologação&quot;&gt;E agora quero validar isso no meu servidor de homologação.&lt;/h5&gt;
+
+&lt;p&gt;Eu particularmente não gosto de criar uma tag nova cada vez que algo vai ser homologado, então o que faço é o seguinte:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git flow release publish 1.2.0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Para que o release em andamento seja enviado para o servidor remoto, então no meu servidor de homologação eu executo os seguintes comandos:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git remote update
+$ git checkout feature/1.2.0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Caso note que algo precise de ajustes os realizo na minha maquina local, faço um novo publish e então no servidor:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git pull
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;está-tudo-ok-e-agora&quot;&gt;Está tudo OK e agora?&lt;/h5&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git flow release finish 1.2.0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Nesse momento será feito merge do release na &lt;code class=&quot;highlighter-rouge&quot;&gt;master&lt;/code&gt; na &lt;code class=&quot;highlighter-rouge&quot;&gt;develop&lt;/code&gt;, tanto as branchs locais quanto remotas usadas pelo release serão deletas, e uma tag com o nome do release será gerada.&lt;/p&gt;
+
+&lt;p&gt;Então esse é o momento de enviarmos todas essas alterações para o servidor remoto:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git checkout master
+$ git push origin master
+
+$ git checkout develop
+$ git push origin develop
+
+$ git push --tag
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Com isso finalizamos um release utilizan… espera aí, tem mais.&lt;/p&gt;
+
+&lt;h5 id=&quot;preciso-fazer-deploy-disso-agora&quot;&gt;Preciso fazer deploy disso agora!&lt;/h5&gt;
+
+&lt;p&gt;No seu servidor de produção baixe a tag nova.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git remote update
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;E então altere sua branch atual para a tag da versão que será feita o deploy&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git checkout 1.2.0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Pronto, deploy finalizado.&lt;/p&gt;
+
+&lt;h5 id=&quot;calma-aí-alguma-coisa-quebrou&quot;&gt;Calma aí, alguma coisa quebrou!!&lt;/h5&gt;
+
+&lt;p&gt;Nesse momento você deve iniciar um hotfix, o hotfix é bem parecido com o release com o porem que ele sempre parte da &lt;code class=&quot;highlighter-rouge&quot;&gt;master&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git flow hotfix start 1.2.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Para o hotfix eu utilizo o mesmo principio de nomes do release, no exemplo acima será criada uma branch com o nome &lt;code class=&quot;highlighter-rouge&quot;&gt;hotfix/1.2.1&lt;/code&gt; que pode ser testada em homologação usando a mesma estratégia que mostramos anteriormente para o release.&lt;/p&gt;
+
+&lt;p&gt;Para finalizar utilize o comando&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git flow hotfix finish 1.2.1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Nesse momento será feito merge na &lt;code class=&quot;highlighter-rouge&quot;&gt;master&lt;/code&gt; e &lt;code class=&quot;highlighter-rouge&quot;&gt;develop&lt;/code&gt;, serão apagada as branchs locais e remotas e uma tag com o nome do hotfix será criada, não esqueça de fazer push das branchs e tag, e então você poderá fazer deploy disso da mesma forma que fizemos com o release.&lt;/p&gt;
+
+&lt;h2 id=&quot;dicas&quot;&gt;Dicas&lt;/h2&gt;
+
+&lt;h5 id=&quot;desative-o-fast-forward-para-os-merges&quot;&gt;Desative o &lt;code class=&quot;highlighter-rouge&quot;&gt;fast-forward&lt;/code&gt; para os merges.&lt;/h5&gt;
+
+&lt;p&gt;Assim você não perde o tracking dos merges no &lt;code class=&quot;highlighter-rouge&quot;&gt;git log&lt;/code&gt;, para isso basta executar o comando abaixo:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git config --global --add merge.ff false
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;ordene-suas-tags-com-base-no-número-da-versão&quot;&gt;Ordene suas tags com base no número da versão&lt;/h5&gt;
+
+&lt;p&gt;As vezes esquecemos qual deve ser a próxima versão, e o &lt;code class=&quot;highlighter-rouge&quot;&gt;git tag&lt;/code&gt; não usa &lt;a href=&quot;https://blog.codinghorror.com/sorting-for-humans-natural-sort-order/&quot;&gt;natural sort&lt;/a&gt; por padrão, para resolver isso:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git config --global tag.sort version:refname
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Antes:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git tag
+1.0
+1.1
+1.2
+1.20
+1.3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Depois:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git tag
+1.0
+1.1
+1.2
+1.3
+1.20
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;por-algum-motivo-bizarro-não-quero-que-as-branchs-aonde-as-features-são-desenvolvidas-sejam-deletas&quot;&gt;Por algum motivo bizarro não quero que as branchs aonde as features são desenvolvidas sejam deletas.&lt;/h5&gt;
+
+&lt;p&gt;Ok… você que manda, utilize para isso a flag &lt;code class=&quot;highlighter-rouge&quot;&gt;-k&lt;/code&gt; no finish&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ git flow feature finish -k nome-da-feature
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;instale-o-utilize-o-gitk-para-entender-melhor-aonde-começa-e-termina-uma-branch-e-evitar-se-perder&quot;&gt;Instale o utilize o &lt;code class=&quot;highlighter-rouge&quot;&gt;gitk&lt;/code&gt; para entender melhor aonde começa e termina uma branch e evitar se perder.&lt;/h5&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo apt-get install gitk
+
+$ gitk --all
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+        <pubDate>Tue, 27 Oct 2015 01:52:55 -0200</pubDate>
+        <link>http://localhost:4000/2015/10/27/workflow-com-git-flow/</link>
+        <guid isPermaLink="true">http://localhost:4000/2015/10/27/workflow-com-git-flow/</guid>
+      </item>
+    
+      <item>
+        <title>Usando virtualenv com virtualenvwrapper</title>
+        <description>&lt;p&gt;O uso do &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; é um item quase que obrigatório em qualquer ambiente de desenvolvimento Python, é usado para isolar os pacotes do projeto dos pacotes do sistema.&lt;/p&gt;
+
+&lt;p&gt;O que vejo poucas pessoas usando é o &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenvwrapper&lt;/code&gt; que visa a resolver vários problemas criados pelo &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; como a necessidade de se usar sempre &lt;code class=&quot;highlighter-rouge&quot;&gt;source bin/activate&lt;/code&gt; e os arquivos do &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; sendo colocados lado-a-lado com os arquivos do seu projeto.&lt;/p&gt;
+
+&lt;h2 id=&quot;instalação&quot;&gt;Instalação&lt;/h2&gt;
+
+&lt;p&gt;Primeiro vamos a instalação dos pacotes necessários (essa possivelmente deverá ser a ultima vez que você instala algo globalmente no seu sistema):&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ sudo pip install virtualenv virtualenvwrapper
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;E adicione a seguinte linha ao final do seu arquivo &lt;code class=&quot;highlighter-rouge&quot;&gt;.bashrc&lt;/code&gt; (ou equivalente):&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;source /usr/local/bin/virtualenvwrapper.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Reinicie seu shell e você possuirá entre outros os seguintes novos comandos.&lt;/p&gt;
+
+&lt;h2 id=&quot;uso&quot;&gt;Uso&lt;/h2&gt;
+
+&lt;p&gt;Para criar um novo ambiente use:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; mkvirtualenv meu_projeto
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Para criar um novo ambiente com Python 3:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; mkvirtualenv meu_projeto2 --python=`which python3`
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Para listar todos seus ambientes:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;lsvirtualenv
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Para executar um comando em todos os ambientes:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;allvirtualenv pip install -U django
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;E para remover um ambiente:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;rmvirtualenv meu_projeto
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;E para ativar/trocar de ambiente:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;workon meu_projeto2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Para desativar é igual, sem qualquer novidade:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;deactivate
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;dicas&quot;&gt;Dicas&lt;/h2&gt;
+
+&lt;p&gt;Caso você esteja usando o &lt;code class=&quot;highlighter-rouge&quot;&gt;zsh&lt;/code&gt; como shell juntamente com o &lt;code class=&quot;highlighter-rouge&quot;&gt;oh-my-zsh&lt;/code&gt; é possivel ativar automaticamente um ambiente ao entrar em determinadas pastas (&lt;code class=&quot;highlighter-rouge&quot;&gt;cd meu_projeto&lt;/code&gt;) para isso adicione o plugin &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenvwrapper&lt;/code&gt; a lista de plugins no seu arquivo &lt;code class=&quot;highlighter-rouge&quot;&gt;.zshrc&lt;/code&gt; e sempre que você entrar em alguma pasta o plugin irá procurar um ambiente com o nome daquela pasta e ativa-lo, também é possivel criar um arquivo chamado &lt;code class=&quot;highlighter-rouge&quot;&gt;.venv&lt;/code&gt; dentro da pasta do projeto contendo o nome do ambiente a ser ativado (ex.: &lt;code class=&quot;highlighter-rouge&quot;&gt;echo meu_projeto &amp;gt; .venv&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;Originalmente publicado em: &lt;a href=&quot;http://www.pythonclub.com.br/&quot;&gt;Python Club&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Thu, 14 May 2015 00:17:50 -0300</pubDate>
+        <link>http://localhost:4000/2015/05/14/usando-virtualenv-com-virtualenvwrapper/</link>
+        <guid isPermaLink="true">http://localhost:4000/2015/05/14/usando-virtualenv-com-virtualenvwrapper/</guid>
+      </item>
+    
+  </channel>
+</rss>

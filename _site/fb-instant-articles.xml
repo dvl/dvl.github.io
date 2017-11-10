@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title></title>
+    <link>http://localhost:4000</link>
+    <description>
+      Thoughts, stories and ideas.
+    </description>
+    
+        
+            <item>
+                <title>Configurando Pidgin para conectar ao Google Hangouts</title>
+                <link>http://localhost:4000/2017/02/08/configurando-pidgin-para-conectar-ao-google-hangouts/</link>
+                <content:encoded>
+                    <![CDATA[
+                    <p><img src="http://i.imgur.com/EFfyWlW.png" alt="Configuração" /></p>
+
+                    ]]>
+                </content:encoded>
+                <guid isPermaLink="false">/2017/02/08/configurando-pidgin-para-conectar-ao-google-hangouts/</guid>
+                <description>
+                    
+                </description>
+                <pubDate>Wed, 08 Feb 2017 20:51:19 -0200</pubDate>
+                <author>André Luiz</author>
+            </item>
+        
+    
+        
+            <item>
+                <title>Django - melhorando a estrutura inicial do projeto</title>
+                <link>http://localhost:4000/2016/09/03/django-melhorando-a-estrutura-inicial-do-projeto/</link>
+                <content:encoded>
+                    <![CDATA[
+                    <p>Creio que por razões históricas a equipe do Django nunca se preocupou muito em alterar a disposição de arquivos e pastas que tanto os comandos <code class="highlighter-rouge">startproject</code> e <code class="highlighter-rouge">startapp</code> geram.</p>
+
+<p>Na minha opinião ambos tem um problema muito sério que é não criar um namespace exclusivo para o seu projeto.</p>
+
+<blockquote>
+  <p>Namespaces are one honking great idea – let’s do more of those!</p>
+</blockquote>
+
+<blockquote>
+  <p>The Zen of Python, by Tim Peters</p>
+</blockquote>
+
+<p>Na estrutura padrão é muito normal que você termine importações parecidas com:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from filmes.models import Titulo
+from series.models import Ator
+</code></pre></div></div>
+
+<p>Entretanto isso na minha cabeça gera uma ambiguidade enorme, seriam filmes e series parte do projeto? Seriam da biblioteca padrão? Seriam pacotes baixados do PyPi? Pelo nome posso dizer que fazem parte do projeto mas nem sempre é tão simples assim.</p>
+
+<p>O próprio Django usa namespace, você não faz:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from utils import timezone
+from utils.crypto import get_random_string
+</code></pre></div></div>
+
+<p>E sim:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from django.utils import timezone
+from django.utils.crypto import get_random_string
+</code></pre></div></div>
+
+<p>Então porque com nosso projeto não podemos fazer semelhante?</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>from philos.filmes.models import Titulo
+from philos.series.models import Ator
+</code></pre></div></div>
+
+<p>Esse é um padrão bem simples de ser implementado no seu projeto Django, vamos a um exemplo, logo após o <code class="highlighter-rouge">startproject</code> nossa estrutura de diretórios é idêntica a exibida abaixo.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>philos.tv
+├── manage.py
+└── philos
+    ├── __init__.py
+    ├── settings.py
+    ├── urls.py
+    └── wsgi.py
+</code></pre></div></div>
+
+<p>Ao criar uma nova app ele por padrão é colocado na raiz do projeto, nesse caso precisamos mover essa nova app no nosso caso para dentro da pasta <code class="highlighter-rouge">philos</code> ficando da seguinte forma:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>philos.tv
+├── manage.py
+└── philos
+    ├── filmes
+    │   ├── admin.py
+    │   ├── apps.py
+    │   ├── __init__.py
+    │   ├── migrations
+    │   │   └── __init__.py
+    │   ├── models.py
+    │   ├── tests.py
+    │   └── views.py
+    ├── __init__.py
+    ├── settings.py
+    ├── urls.py
+    └── wsgi.py
+</code></pre></div></div>
+
+<p>Para facilitar isso pode ser feito com os seguintes comandos:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ mkdir -p philos/filmes
+$ python manage.py startapp filmes philos/filmes
+</code></pre></div></div>
+
+<p>Então registramos nossa app no <code class="highlighter-rouge">settings.py</code> da seguinte forma:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>INSTALLED_APPS = [
+    'django.contrib.admin',
+    ...
+    'philos.filmes',
+]
+</code></pre></div></div>
+
+<p>Criei um <a href="https://github.com/dvl/example-for-blog-1">repositório no GitHub</a> para que você possa navegar pelas pastas para facilitar o entendimento.</p>
+
+<p>Também tenho um <a href="https://github.com/dvl/cookiecutter-django-clean-template">outro projeto</a> que uso de base para qualquer projeto que começo atualmente.</p>
+
+                    ]]>
+                </content:encoded>
+                <guid isPermaLink="false">/2016/09/03/django-melhorando-a-estrutura-inicial-do-projeto/</guid>
+                <description>
+                    
+                </description>
+                <pubDate>Sat, 03 Sep 2016 19:28:42 -0300</pubDate>
+                <author>André Luiz</author>
+            </item>
+        
+    
+        
+            <item>
+                <title>Pare de usar @gmail.com para coisas com as quais você se importa</title>
+                <link>http://localhost:4000/2016/07/09/pare-de-usar-gmail-com-para-coisas-com-as-quais-voce-se-importa/</link>
+                <content:encoded>
+                    <![CDATA[
+                    <p>A exatas duas semanas tive minha conta da Google desativada por motivos que até hoje não foram esclarecidos.</p>
+
+<p>Ao tentar entrar em contato com a Google descobri que você simplesmente não pode falar com a equipe de contas responsável por desativar minha conta.</p>
+
+<p>Depois de questionar no fórum de suporte tanto em português quanto em inglês tive uma resposta semelhante em ambos, a primeira de uma funcionária da Google.</p>
+
+<p><img src="http://i.imgur.com/PGf4Ovz.png" alt="" /></p>
+
+<p><img src="http://i.imgur.com/1QrwOKA.png" alt="" /></p>
+
+<p>Em ambos os casos fui obrigado a apontar que o Gmail pode não ser diretamente pago mais todos os serviços pagos da Google (Play, Drive, Music, Serviços para desenvolvedores) são atrelados a ele.</p>
+
+<p>Ninguém liga, mesmo pagando eles dizem que a Google pode fazer o que quiser com sua conta e não é sequer obrigada a explicar os motivos.</p>
+
+                    ]]>
+                </content:encoded>
+                <guid isPermaLink="false">/2016/07/09/pare-de-usar-gmail-com-para-coisas-com-as-quais-voce-se-importa/</guid>
+                <description>
+                    
+                </description>
+                <pubDate>Sat, 09 Jul 2016 16:15:21 -0300</pubDate>
+                <author>André Luiz</author>
+            </item>
+        
+    
+        
+            <item>
+                <title>Não adicione arquivos do seu SO/editor no .gitignore</title>
+                <link>http://localhost:4000/2016/03/06/nao-adicione-arquivos-do-seu-so-editor-no-gitginore/</link>
+                <content:encoded>
+                    <![CDATA[
+                    <p>A ideia é simples, o arquivo <code class="highlighter-rouge">.gitignore</code> do projeto deve ser usado somente para ignorar arquivos gerados pelo projeto.</p>
+
+<p>Seu projeto não deve ser responsável por ignorar arquivos gerados pelo seu sistema operacional ou editor por exemplo <code class="highlighter-rouge">.DS_Store</code>do OS X ou <code class="highlighter-rouge">.idea</code> das IDEs da JetBrains.</p>
+
+<p>Segundo os <a href="https://github.com/django/django/blob/master/.gitignore">desenvolvedores do Django</a> por exemplo você deve configurar isso em locais que não vão para o repositório.</p>
+
+<p>Para mim a maneira mais fácil é no <code class="highlighter-rouge">~/.gitconfig</code> usando o <code class="highlighter-rouge">core.excludesFile</code>.</p>
+
+<p>Exemplo:</p>
+
+<p><code class="highlighter-rouge">~/.gitconfig</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[core]
+excludesFile = ~/.gitignore_global
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">~/.gitignore_global</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>*.sublime-project
+*.sublime-workspace
+.idea
+.ipynb_checkpoints
+
+*.ipynb
+
+.DS_Store
+Thumbs.db
+desktop.ini
+</code></pre></div></div>
+
+<p>As vantagens são: Você faz isso uma única vez e você não configura o projeto no qual você está trabalhando como responsável por lidar com seus arquivos, que talvez não seja de interesse de outro desenvolvedor, mas que estariam lá caso ele precise dar manutenção no arquivo complicando a vida dele.</p>
+
+                    ]]>
+                </content:encoded>
+                <guid isPermaLink="false">/2016/03/06/nao-adicione-arquivos-do-seu-so-editor-no-gitginore/</guid>
+                <description>
+                    
+                </description>
+                <pubDate>Sun, 06 Mar 2016 21:24:11 -0300</pubDate>
+                <author>André Luiz</author>
+            </item>
+        
+    
+        
+            <item>
+                <title>Atualizar todos pacotes via pip</title>
+                <link>http://localhost:4000/2016/02/26/atualizar-todos-pacotes-via-pip/</link>
+                <content:encoded>
+                    <![CDATA[
+                    <p>Para listar todos os pacotes desatualizados basta usar:</p>
+
+<p><code class="highlighter-rouge">pip list --outdated</code></p>
+
+<p>Então para atualizar tudo de uma vez:</p>
+
+<p><code class="highlighter-rouge">pip list --outdated | awk '{print $1}' | xargs sudo pip install -U</code></p>
+
+<p>Remova o sudo caso queira atualizar dentro do virtualenv.</p>
+
+                    ]]>
+                </content:encoded>
+                <guid isPermaLink="false">/2016/02/26/atualizar-todos-pacotes-via-pip/</guid>
+                <description>
+                    
+                </description>
+                <pubDate>Fri, 26 Feb 2016 15:43:41 -0300</pubDate>
+                <author>André Luiz</author>
+            </item>
+        
+    
+        
+            <item>
+                <title>Workflow com Git Flow</title>
+                <link>http://localhost:4000/2015/10/27/workflow-com-git-flow/</link>
+                <content:encoded>
+                    <![CDATA[
+                    <p>Esse é um artigo rápido que visa descrever como venho trabalhando com o Git Flow, antes de mais nada o Git Flow é uma forma de gerenciar branchs e tags em repositórios Git originalmente descrita <a href="http://nvie.com/posts/a-successful-git-branching-model/">aqui</a> e que originou <a href="https://github.com/nvie/gitflow">uma extensão</a> para o Git pelo mesmo autor.</p>
+
+<p>Partindo do principio que você já possui o <code class="highlighter-rouge">git-flow</code> instalado, na raiz do seu repositório use o comando <code class="highlighter-rouge">git flow init</code> para configurar o git flow no seu repositório atual, serão feitas algumas perguntas para as quais eu habitualmente uso sempre a opção default.</p>
+
+<p>Git flow instalado, configuração já feita, vamos a um <em>how to</em> de como agir no dia-a-dia.</p>
+
+<h5 id="quero-iniciar-o-desenvolvimento-de-uma-nova-feature">Quero iniciar o desenvolvimento de uma nova feature</h5>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git flow feature start nome-da-feature
+</code></pre></div></div>
+
+<p>O comando acima iria criar uma nova branch chamada <code class="highlighter-rouge">feature/nome-da-feature</code> partindo do conteúdo atual da branch <code class="highlighter-rouge">develop</code>, a partir daqui você deve realizar todo seu trabalho nessa branch que acabou de ser criada.</p>
+
+<h5 id="quero-publicar-minha-feature-para-outra-pessoa-mexer-ou-continuar-de-outro-computador">Quero publicar minha feature para outra pessoa mexer ou continuar de outro computador.</h5>
+
+<p>Antes de mais nada faça commit de todas sua alterações como de costume e então execute o comando abaixo:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git flow feature publish nome-da-feature
+</code></pre></div></div>
+
+<p>Esse comando simplesmente ira fazer um <code class="highlighter-rouge">git push</code> para o servidor remoto criando a branch caso não exista.</p>
+
+<p>Então a outra pessoa (ou você mesmo de outro computador) deverá usar o comando abaixo.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git flow feature pull nome-da-feature
+</code></pre></div></div>
+
+<h5 id="terminei-minha-feature-e-agora">Terminei minha feature e agora?</h5>
+
+<p>Depois de commitar todas sua alterações use o comando:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git flow feature finish nome-da-feature
+</code></pre></div></div>
+
+<p>Esse comando ira executar um merge da sua feature na branch <code class="highlighter-rouge">develop</code> e então ira remover a branch <code class="highlighter-rouge">feature/nome-da-feature</code> da sua maquina local e do  servidor remoto (e sim, é esse o comportamento desejado, não queremos 200 branchs defasadas depois de alguns meses de projeto e queremos poder eventualmente reutilizar o nome de alguma feature em uma futura melhoria por exemplo).</p>
+
+<h5 id="ok-já-tenho-todas-as-minhas-features-prontas-mergeadas-na-develop-e-agora-preciso-coloca-las-no-ar">Ok, já tenho todas as minhas features prontas, mergeadas na develop e agora preciso coloca-las no ar.</h5>
+
+<p>Esse é o momento no qual devemos iniciar a criação de um release, para isso utilize o comando</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git flow release start 1.2.0
+</code></pre></div></div>
+
+<p>Aonde <code class="highlighter-rouge">1.2.0</code> é o nome do release, a partir desse nome será gerada uma tag ao finalizarmos o release, pode ser usado o nome que você quiser <strong>eu</strong> me habituei em criar release com usando como nome o número da versão que está indo para o ar baseado sempre no <a href="http://semver.org/lang/pt-BR/">SemVer</a>.</p>
+
+<p>O comando acima ira criar uma nova branch partindo da <code class="highlighter-rouge">develop</code>, caso você tenha algum ajuste para fazer no seu código essa é a hora.</p>
+
+<h5 id="e-agora-quero-validar-isso-no-meu-servidor-de-homologação">E agora quero validar isso no meu servidor de homologação.</h5>
+
+<p>Eu particularmente não gosto de criar uma tag nova cada vez que algo vai ser homologado, então o que faço é o seguinte:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git flow release publish 1.2.0
+</code></pre></div></div>
+
+<p>Para que o release em andamento seja enviado para o servidor remoto, então no meu servidor de homologação eu executo os seguintes comandos:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git remote update
+$ git checkout feature/1.2.0
+</code></pre></div></div>
+
+<p>Caso note que algo precise de ajustes os realizo na minha maquina local, faço um novo publish e então no servidor:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git pull
+</code></pre></div></div>
+
+<h5 id="está-tudo-ok-e-agora">Está tudo OK e agora?</h5>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git flow release finish 1.2.0
+</code></pre></div></div>
+
+<p>Nesse momento será feito merge do release na <code class="highlighter-rouge">master</code> na <code class="highlighter-rouge">develop</code>, tanto as branchs locais quanto remotas usadas pelo release serão deletas, e uma tag com o nome do release será gerada.</p>
+
+<p>Então esse é o momento de enviarmos todas essas alterações para o servidor remoto:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git checkout master
+$ git push origin master
+
+$ git checkout develop
+$ git push origin develop
+
+$ git push --tag
+</code></pre></div></div>
+
+<p>Com isso finalizamos um release utilizan… espera aí, tem mais.</p>
+
+<h5 id="preciso-fazer-deploy-disso-agora">Preciso fazer deploy disso agora!</h5>
+
+<p>No seu servidor de produção baixe a tag nova.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git remote update
+</code></pre></div></div>
+
+<p>E então altere sua branch atual para a tag da versão que será feita o deploy</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git checkout 1.2.0
+</code></pre></div></div>
+
+<p>Pronto, deploy finalizado.</p>
+
+<h5 id="calma-aí-alguma-coisa-quebrou">Calma aí, alguma coisa quebrou!!</h5>
+
+<p>Nesse momento você deve iniciar um hotfix, o hotfix é bem parecido com o release com o porem que ele sempre parte da <code class="highlighter-rouge">master</code>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git flow hotfix start 1.2.1
+</code></pre></div></div>
+
+<p>Para o hotfix eu utilizo o mesmo principio de nomes do release, no exemplo acima será criada uma branch com o nome <code class="highlighter-rouge">hotfix/1.2.1</code> que pode ser testada em homologação usando a mesma estratégia que mostramos anteriormente para o release.</p>
+
+<p>Para finalizar utilize o comando</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git flow hotfix finish 1.2.1
+</code></pre></div></div>
+
+<p>Nesse momento será feito merge na <code class="highlighter-rouge">master</code> e <code class="highlighter-rouge">develop</code>, serão apagada as branchs locais e remotas e uma tag com o nome do hotfix será criada, não esqueça de fazer push das branchs e tag, e então você poderá fazer deploy disso da mesma forma que fizemos com o release.</p>
+
+<h2 id="dicas">Dicas</h2>
+
+<h5 id="desative-o-fast-forward-para-os-merges">Desative o <code class="highlighter-rouge">fast-forward</code> para os merges.</h5>
+
+<p>Assim você não perde o tracking dos merges no <code class="highlighter-rouge">git log</code>, para isso basta executar o comando abaixo:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git config --global --add merge.ff false
+</code></pre></div></div>
+
+<h5 id="ordene-suas-tags-com-base-no-número-da-versão">Ordene suas tags com base no número da versão</h5>
+
+<p>As vezes esquecemos qual deve ser a próxima versão, e o <code class="highlighter-rouge">git tag</code> não usa <a href="https://blog.codinghorror.com/sorting-for-humans-natural-sort-order/">natural sort</a> por padrão, para resolver isso:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git config --global tag.sort version:refname
+</code></pre></div></div>
+
+<p>Antes:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git tag
+1.0
+1.1
+1.2
+1.20
+1.3
+</code></pre></div></div>
+
+<p>Depois:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git tag
+1.0
+1.1
+1.2
+1.3
+1.20
+</code></pre></div></div>
+
+<h5 id="por-algum-motivo-bizarro-não-quero-que-as-branchs-aonde-as-features-são-desenvolvidas-sejam-deletas">Por algum motivo bizarro não quero que as branchs aonde as features são desenvolvidas sejam deletas.</h5>
+
+<p>Ok… você que manda, utilize para isso a flag <code class="highlighter-rouge">-k</code> no finish</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git flow feature finish -k nome-da-feature
+</code></pre></div></div>
+
+<h5 id="instale-o-utilize-o-gitk-para-entender-melhor-aonde-começa-e-termina-uma-branch-e-evitar-se-perder">Instale o utilize o <code class="highlighter-rouge">gitk</code> para entender melhor aonde começa e termina uma branch e evitar se perder.</h5>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo apt-get install gitk
+
+$ gitk --all
+</code></pre></div></div>
+
+                    ]]>
+                </content:encoded>
+                <guid isPermaLink="false">/2015/10/27/workflow-com-git-flow/</guid>
+                <description>
+                    
+                </description>
+                <pubDate>Tue, 27 Oct 2015 01:52:55 -0200</pubDate>
+                <author>André Luiz</author>
+            </item>
+        
+    
+        
+            <item>
+                <title>Usando virtualenv com virtualenvwrapper</title>
+                <link>http://localhost:4000/2015/05/14/usando-virtualenv-com-virtualenvwrapper/</link>
+                <content:encoded>
+                    <![CDATA[
+                    <p>O uso do <code class="highlighter-rouge">virtualenv</code> é um item quase que obrigatório em qualquer ambiente de desenvolvimento Python, é usado para isolar os pacotes do projeto dos pacotes do sistema.</p>
+
+<p>O que vejo poucas pessoas usando é o <code class="highlighter-rouge">virtualenvwrapper</code> que visa a resolver vários problemas criados pelo <code class="highlighter-rouge">virtualenv</code> como a necessidade de se usar sempre <code class="highlighter-rouge">source bin/activate</code> e os arquivos do <code class="highlighter-rouge">virtualenv</code> sendo colocados lado-a-lado com os arquivos do seu projeto.</p>
+
+<h2 id="instalação">Instalação</h2>
+
+<p>Primeiro vamos a instalação dos pacotes necessários (essa possivelmente deverá ser a ultima vez que você instala algo globalmente no seu sistema):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo pip install virtualenv virtualenvwrapper
+</code></pre></div></div>
+
+<p>E adicione a seguinte linha ao final do seu arquivo <code class="highlighter-rouge">.bashrc</code> (ou equivalente):</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>source /usr/local/bin/virtualenvwrapper.sh
+</code></pre></div></div>
+
+<p>Reinicie seu shell e você possuirá entre outros os seguintes novos comandos.</p>
+
+<h2 id="uso">Uso</h2>
+
+<p>Para criar um novo ambiente use:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> mkvirtualenv meu_projeto
+</code></pre></div></div>
+
+<p>Para criar um novo ambiente com Python 3:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> mkvirtualenv meu_projeto2 --python=`which python3`
+</code></pre></div></div>
+
+<p>Para listar todos seus ambientes:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lsvirtualenv
+</code></pre></div></div>
+
+<p>Para executar um comando em todos os ambientes:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>allvirtualenv pip install -U django
+</code></pre></div></div>
+
+<p>E para remover um ambiente:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rmvirtualenv meu_projeto
+</code></pre></div></div>
+
+<p>E para ativar/trocar de ambiente:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>workon meu_projeto2
+</code></pre></div></div>
+
+<p>Para desativar é igual, sem qualquer novidade:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>deactivate
+</code></pre></div></div>
+
+<h2 id="dicas">Dicas</h2>
+
+<p>Caso você esteja usando o <code class="highlighter-rouge">zsh</code> como shell juntamente com o <code class="highlighter-rouge">oh-my-zsh</code> é possivel ativar automaticamente um ambiente ao entrar em determinadas pastas (<code class="highlighter-rouge">cd meu_projeto</code>) para isso adicione o plugin <code class="highlighter-rouge">virtualenvwrapper</code> a lista de plugins no seu arquivo <code class="highlighter-rouge">.zshrc</code> e sempre que você entrar em alguma pasta o plugin irá procurar um ambiente com o nome daquela pasta e ativa-lo, também é possivel criar um arquivo chamado <code class="highlighter-rouge">.venv</code> dentro da pasta do projeto contendo o nome do ambiente a ser ativado (ex.: <code class="highlighter-rouge">echo meu_projeto &gt; .venv</code>).</p>
+
+<p>Originalmente publicado em: <a href="http://www.pythonclub.com.br/">Python Club</a></p>
+
+                    ]]>
+                </content:encoded>
+                <guid isPermaLink="false">/2015/05/14/usando-virtualenv-com-virtualenvwrapper/</guid>
+                <description>
+                    
+                </description>
+                <pubDate>Thu, 14 May 2015 00:17:50 -0300</pubDate>
+                <author>André Luiz</author>
+            </item>
+        
+    
+  </channel>
+</rss>
